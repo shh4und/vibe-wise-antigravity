@@ -88,11 +88,10 @@ class ResetTests(unittest.TestCase):
         self.assertTrue((self.project / ".git").is_dir())
         hook = subprocess.run(
             [sys.executable, "-B", str(ROOT / "hooks/session_start.py")],
-            input=json.dumps({"hook_event_name": "SessionStart", "source": "compact",
-                              "cwd": str(self.project)}),
+            input=json.dumps({"conversationId": "test-id", "workspacePaths": [str(self.project)]}),
             text=True, capture_output=True, check=True,
         )
-        context = json.loads(hook.stdout)["hookSpecificOutput"]["additionalContext"]
+        context = json.loads(hook.stdout)["injectSteps"][0]["ephemeralMessage"]
         self.assertIn(str(state), context)
         self.assertIn("Read profile.md and project-map.md", context)
         self.assertIn("If onboarding is incomplete", context)

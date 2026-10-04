@@ -1,0 +1,10 @@
+{
+  "name": "vibe-wise",
+  "version": "0.1.0",
+  "description": "You build. AI writes. Learn how to build software while Gemini writes the code.",
+  "author": { "name": "shh4und" },
+  "originalAuthor": { "name": "Noah Kim" },
+  "repository": "https://github.com/shh4und/vibe-wise-antigravity",
+  "license": "MIT",
+  "keywords": ["learning", "architecture", "engineering", "antigravity", "gemini"]
+}

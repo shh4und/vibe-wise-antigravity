@@ -1,15 +1,12 @@
 # Development
 
-V1 uses Claude Code skills, Markdown instructions, one read-only Python hook,
+V1 uses Antigravity skills, Markdown instructions, one read-only Python lifecycle hook,
 and a small Python helper for confirmed learning resets.
 There are no packages to install. Python 3.8+ is sufficient for the hook and tests.
 
 ## Local checks
 
 ```sh
-claude plugin validate .claude-plugin/plugin.json
-claude plugin validate .claude-plugin/marketplace.json
-claude plugin validate skills
 python3 -B -m unittest discover -s tests -v
 git diff --check
 ```
@@ -18,18 +15,13 @@ The tests execute the registered hook command with real JSON stdin in temporary
 projects. They cover activation, restoration, partial onboarding, paused mode,
 subdirectories, repository/worktree boundaries, missing/invalid files, symlinks,
 constant-size restoration instructions as notes grow, and read-only behavior.
-They do not prove that Claude follows the instructions or teaches well.
+They do not prove that Gemini follows the instructions or teaches well.
 Rename coverage verifies that `.sensible-vibes/` notes restore without migration,
 `.vibe-wise/` takes precedence at the same location, and legacy lookup preserves
 repository boundaries, nearest-state selection, and symlink rejection.
 Reset tests cover read-only preview, confirmed backup/reset, stale confirmation,
 legacy and partial notes, nested projects, repeated backups, rejected symlinks,
 backup/write failures, and restoring incomplete onboarding after reset.
-
-## Conversation smoke tests
-
-Use an authenticated Claude Code session and temporary copies of projects.
-Launch with `claude --plugin-dir /absolute/path/to/vibe-wise`.
 
 For a manual walkthrough based on the playground notes app, see the
 [Notion-style demo](demos/notion-dupe.md).

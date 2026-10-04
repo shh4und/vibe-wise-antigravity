@@ -1,45 +1,44 @@
-<img src=".claude-plugin/icon.svg" alt="VibeWise brain with code brackets" width="96" height="96">
+<img src="assets/icon.svg" alt="VibeWise brain with code brackets" width="96" height="96">
 
-# VibeWise
+# VibeWise (Antigravity Port)
 
 **You build. AI writes.**
 
-A Claude Code plugin that puts learning first and keeps you in control while AI writes the code you designed. Claude **asks for your approach first**, helps you examine tradeoffs, and explains unfamiliar concepts. You shape the design and decide when it's ready to implement. Claude writes the code, then explains what it changed and why.
+A Gemini Antigravity plugin that puts learning first and keeps you in control while AI writes the code you designed. Gemini **asks for your approach first**, helps you examine tradeoffs, and explains unfamiliar concepts. You shape the design and decide when it's ready to implement. Gemini writes the code, then explains what it changed and why.
 
 For anyone who wants to learn as they build—whether you're an aspiring engineer, a junior developer, or an experienced engineer exploring an unfamiliar stack. Practice planning how the pieces fit together, anticipating failures, and checking the result while keeping ownership of the decisions.
 
 ## Get started
 
-You need [Claude Code](https://code.claude.com/docs/en/setup) and
+You need [Antigravity IDE](https://antigravity.google) and
 [Python 3](https://www.python.org/downloads/). VibeWise uses Python to restore
 learning context and reset learning notes. No extra Python packages are needed.
 
-VibeWise has been approved for Anthropic's Claude directory, but isn't listed in
-the public community marketplace yet. I expect it to appear soon. In the meantime,
-install it in Claude Code through my GitHub marketplace:
+### Installation
 
-Run these commands **one at a time** in Claude Code. First, add the marketplace:
+Install this plugin globally or per-workspace:
 
-```text
-/plugin marketplace add nykooi1/vibe-wise
+**Global level (available across all projects):**
+
+```sh
+git clone https://github.com/shh4und/vibe-wise-antigravity ~/.gemini/config/plugins/vibe-wise
+```
+*(or symlink your local clone: `ln -s /path/to/vibe-wise-antigravity ~/.gemini/config/plugins/vibe-wise`)*
+
+**Workspace level (specific to one project):**
+
+```sh
+git clone https://github.com/shh4und/vibe-wise-antigravity .agents/plugins/vibe-wise
 ```
 
-After it finishes, install the plugin:
+In Antigravity IDE, open the project you want to work on, then run:
 
 ```text
-/plugin install vibe-wise@vibe-wise
+/learn
 ```
+(or tell the agent: *"Activate learning mode"*).
 
-**Enable automatic updates:** open `/plugin` → **Marketplaces** → **vibe-wise** →
-**Enable auto-update**. This is off by default for third-party marketplaces.
-
-Restart Claude Code in the project you want to work on, then run:
-
-```text
-/vibe-wise:learn
-```
-
-Setup asks one question at a time. Use the arrow keys and Enter for choices; pick **Use defaults** to skip preference setup. Then ask Claude to build something. Starting fresh or joining an unfamiliar repository both work. For an existing repository, Claude first inspects the code and sketches a small system map.
+Setup asks one question at a time using native interactive choices. Pick **Use defaults** to skip preference setup. Then ask Gemini to build something. Starting fresh or joining an unfamiliar repository both work. For an existing repository, Gemini first inspects the code and sketches a small system map.
 
 ## What it feels like
 
@@ -189,41 +188,35 @@ Experience changes the support you get, not your ownership of decisions:
 | Intermediate | Less introductory context; explore interactions and tradeoffs. |
 | Advanced | Probe difficult constraints, failure modes, and design assumptions. |
 
-Everyone reasons first. Claude adapts to what you demonstrate and how familiar you
+Everyone reasons first. Gemini adapts to what you demonstrate and how familiar you
 are with the stack. Checkpoint frequency—Light, Normal, or Frequent—is separate.
 
 - “Use fewer checkpoints.”
 - “Focus on backend architecture.”
 - “Use multiple-choice questions.”
 - “Just implement this one.”
-- “Pause learning.” Resume with `/vibe-wise:learn`.
+- “Pause learning.” Resume with `/learn`.
 
-Preferences, learning notes, and a project map live in `.vibe-wise/` in your project. Learning mode resumes in future sessions and after compaction. Add `.vibe-wise/` to your `.gitignore` to keep your notes out of Git; the plugin won't change it silently.
+Preferences, learning notes, and a project map live in `.vibe-wise/` in your project. Learning mode resumes across conversations and IDE restarts. Add `.vibe-wise/` to your `.gitignore` to keep your notes out of Git; the plugin won't change it silently.
 
-No extra account, backend, or telemetry. Saved notes are included in Claude's context, so your normal Claude Code data settings still apply.
+No extra account, backend, or telemetry. Saved notes are included in the model's context, so your normal Antigravity privacy settings apply.
 
-To start learning this project from scratch, run `/vibe-wise:reset`. It shows the
+To start learning this project from scratch, run `/reset`. It shows the
 project and asks **Cancel / Reset learning**. After confirmation, it backs up your
 profile, progress, and project map inside the notes directory's `backups/` folder,
 then restarts onboarding. Source code and other projects stay untouched. To change
-your experience level or preferences, just tell Claude; no reset is needed.
+your experience level or preferences, just tell Gemini; no reset is needed.
 
 ## Updating
 
-For automatic updates, open `/plugin` → **Marketplaces** → **vibe-wise** →
-**Enable auto-update**. Auto-update is off by default for third-party marketplaces.
-Claude Code notifies you after an update; restart Claude Code to load the new version.
-
-To update manually, run these in your terminal:
+To update the plugin, pull the latest changes from the repository:
 
 ```sh
-claude plugin marketplace update vibe-wise
-claude plugin update vibe-wise@vibe-wise
+cd ~/.gemini/config/plugins/vibe-wise && git pull
 ```
+(or in your `.agents/plugins/vibe-wise` directory).
 
-Then restart Claude Code. Your project learning notes stay intact; no reset is needed.
-Run `claude plugin list` to check the installed version.
-[More about plugin updates](https://code.claude.com/docs/en/discover-plugins#keep-plugins-updated).
+Your project learning notes stay intact; no reset is needed.
 
 ## License
 

@@ -1,9 +1,9 @@
-"""Restore learning context when Claude Code starts or resumes a session.
+"""Restore learning context when Gemini Antigravity executes a turn.
 
-Claude Code sends a JSON event on stdin. For a project with active learning notes,
-we print JSON instructions telling Claude which files to read. Otherwise we stay
-silent. This hook does not teach, write notes, or parse conversation transcripts.
-The events that trigger it (including compaction) are configured in hooks.json.
+Antigravity sends a PreInvocation JSON event on stdin with workspacePaths.
+For a project with active learning notes, we print JSON instructions with
+ephemeralMessage telling Gemini which files to read. Otherwise we return {}.
+This hook does not teach, write notes, or parse conversation transcripts.
 """
 
 import json
@@ -55,10 +55,17 @@ def state_directory(cwd):
 
 
 def restore(payload):
-    """Build Claude's restoration instructions, or return None to do nothing."""
-    if not isinstance(payload, dict) or payload.get("hook_event_name") != "SessionStart":
+    """Build Antigravity restoration instructions, or return None to do nothing."""
+    if not isinstance(payload, dict):
         return None
-    raw_cwd = payload.get("cwd")
+
+    raw_cwd = None
+    workspace_paths = payload.get("workspacePaths")
+    if isinstance(workspace_paths, list) and workspace_paths:
+        raw_cwd = workspace_paths[0]
+    elif "cwd" in payload:
+        raw_cwd = payload.get("cwd")
+
     # Use the event's explicit project path. A relative path would depend on where
     # the hook process happened to start and could select the wrong learning notes.
     if not isinstance(raw_cwd, str) or not Path(raw_cwd).is_absolute():
@@ -77,7 +84,7 @@ def restore(payload):
     # Bootstrap from source files instead of emitting partial notes or an incomplete
     # topic index. Output size is independent of the amount of learning history.
     context = (
-        "VibeWise is active for this project. Before responding or coding, use Read "
+        "VibeWise is active for this project. Before responding or coding, use view_file "
         "to load the Learn guide and its referenced behavior instructions:\n"
         f"{PLUGIN_ROOT / 'skills/learn/SKILL.md'}\n\n"
         f"State directory: {state}\n"
@@ -92,11 +99,14 @@ def restore(payload):
         "questions; do not repeat completed onboarding. If the profile is now "
         "paused, keep it paused: this hook is not an explicit Learn invocation."
     )
-    # Claude Code adds additionalContext to the model's context. These are reading
-    # instructions for Claude; the hook itself hasn't loaded the map or progress.
-    return {"hookSpecificOutput": {
-        "hookEventName": "SessionStart", "additionalContext": context
-    }}
+
+    return {
+        "injectSteps": [
+            {
+                "ephemeralMessage": context
+            }
+        ]
+    }
 
 
 def main():
@@ -107,9 +117,9 @@ def main():
         output = restore(payload)
     except (OSError, ValueError, TypeError, RecursionError):
         return  # Learning should never prevent a coding session from starting.
-    if output:
-        # stdout is the hook's JSON protocol; avoid progress logs or other text.
-        print(json.dumps(output))
+
+    # Antigravity expects a valid JSON object on stdout (output or empty object)
+    print(json.dumps(output if output is not None else {}))
 
 
 if __name__ == "__main__":
